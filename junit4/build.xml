@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="junit4-test" default="test">
+
+  <path id="base.path">
+    <fileset dir="lib" includes="**/*.jar"/>
+  </path>
+
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
+
+  <target name="compile" depends="clean">
+    <mkdir dir="build/classes"/>
+    <javac destdir="build/classes" encoding="UTF-8"
+           includeantruntime="false" verbose="on">
+      <src path="src"/>
+      <src path="test"/>
+      <classpath refid="base.path"/>
+    </javac>
+  </target>
+
+  <target name="test" depends="compile">
+    <mkdir dir="build/junit"/>
+    <junit fork="on" printsummary="on" haltonfailure="off">
+      <classpath location="build/classes"/>
+      <classpath refid="base.path"/>
+
+      <formatter type="xml"/>
+      <batchtest todir="build/junit">
+        <fileset dir="test" includes="**/*Test.java"/>
+      </batchtest>
+    </junit>
+    <junitreport>
+      <fileset dir="build/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="build/html"/>
+    </junitreport>
+  </target>
+
+</project>
