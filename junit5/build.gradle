@@ -1,0 +1,59 @@
+plugins {
+  id 'com.gradle.build-scan' version '1.12.1'
+  id 'java'
+  id 'eclipse'
+  id 'idea'
+  id 'maven'
+}
+
+buildScan {
+  licenseAgreementUrl = "https://gradle.com/terms-of-service"
+  licenseAgree = "yes"
+}
+
+ext.junitPlatformVersion = '1.1.1'
+ext.junitJupiterVersion = '5.1.1'
+
+int javaVersion = Integer.valueOf((String) JavaVersion.current().getMajorVersion())
+
+jar {
+  baseName = 'junit5-gradle-consumer'
+  version = '1.0.0-SNAPSHOT'
+}
+
+test {
+  useJUnitPlatform {
+    // includeEngines 'junit-jupiter', 'junit-vintage'
+    // excludeEngines 'custom-engine'
+
+    // includeTags 'fast'
+    excludeTags 'slow'
+  }
+
+  testLogging {
+    events 'passed', 'skipped', 'failed'
+  }
+
+  reports {
+    html.enabled = true
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  // JUnit Jupiter API and TestEngine implementation
+  testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+  testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+
+  testRuntime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}") {
+    because 'allows tests to run from IDEs that bundle older version of launcher'
+  }
+}
+
+task wrapper(type: Wrapper) {
+  description = 'Generates gradlew[.bat] scripts'
+  gradleVersion = '4.6'
+}
