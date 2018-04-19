@@ -12,7 +12,7 @@ public class FooTest {
     @Test
     public void testGreeting() {
         Singleton target = Singleton.getInstance();
-        log.info("Test:" + this + ", target:" + target);
+        log.info("CL:" + this.getClass().getClassLoader() + ",Test:" + this + ", target:" + target);
 
         assertEquals(target.greeting(), "Hello, noname");
     }
