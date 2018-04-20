@@ -22,6 +22,8 @@ jar {
 }
 
 test {
+  forkEvery = 1
+
   useJUnitPlatform {
     // includeEngines 'junit-jupiter', 'junit-vintage'
     // excludeEngines 'custom-engine'
