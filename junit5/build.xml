@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="junit5-test" default="test">
+  <!-- 要ant v1.10.3
+       ANT_HOME/libに以下のJARファイルを配置しておくこと
+         junit-platform-commons.jar, junit-platform-engine.jar,
+         junit-platform-launcher.jar, opentest4j.jar              -->
+
+  <path id="base.path">
+    <fileset dir="lib" includes="**/*.jar"/>
+  </path>
+
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
+
+  <target name="compile" depends="clean">
+    <mkdir dir="antbuild/classes"/>
+    <javac destdir="antbuild/classes" encoding="UTF-8"
+           includeantruntime="false" verbose="on">
+      <src path="src/main/java"/>
+      <src path="src/test/java"/>
+      <classpath refid="base.path"/>
+    </javac>
+  </target>
+
+  <target name="test" depends="compile">
+    <mkdir dir="antbuild/junit"/>
+    <junitlauncher haltOnFailure="off">
+      <classpath location="antbuild/classes"/>
+      <classpath refid="base.path"/>
+      <testclasses outputdir="antbuild/junit">
+        <fileset dir="antbuild/classes"
+                 includes="com/example/**/*Test.class"/>
+        <listener type="legacy-xml"/>
+        <listener type="legacy-plain" sendSysOut="true"/>
+      </testclasses>
+    </junitlauncher>
+    <junitreport>
+      <fileset dir="antbuild/junit" includes="TEST-*.xml"/>
+      <report format="frames" todir="antbuild/html"/>
+    </junitreport>
+  </target>
+
+</project>
