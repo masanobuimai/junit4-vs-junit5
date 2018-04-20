@@ -21,7 +21,8 @@
 
   <target name="test" depends="compile">
     <mkdir dir="build/junit"/>
-    <junit fork="on" printsummary="on" haltonfailure="off">
+    <!--<junit showoutput="on" printsummary="on" haltonfailure="off">-->
+    <junit fork="on" showoutput="on" printsummary="on" haltonfailure="off">
       <classpath location="build/classes"/>
       <classpath refid="base.path"/>
 
