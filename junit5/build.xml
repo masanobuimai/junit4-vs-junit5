@@ -5,6 +5,10 @@
          junit-platform-commons.jar, junit-platform-engine.jar,
          junit-platform-launcher.jar, opentest4j.jar              -->
 
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath location="ant-contrib-0.6.jar"/>
+  </taskdef>
+
   <path id="base.path">
     <fileset dir="lib" includes="**/*.jar"/>
   </path>
@@ -39,6 +43,35 @@
       <fileset dir="antbuild/junit" includes="TEST-*.xml"/>
       <report format="frames" todir="antbuild/html"/>
     </junitreport>
+  </target>
+
+  <target name="test2" depends="compile">
+    <mkdir dir="antbuild/junit"/>
+    <pathconvert property="testclasses" pathsep=",">
+      <path>
+        <fileset dir="antbuild/classes" includes="**/*Test.class"/>
+      </path>
+      <chainedmapper>
+        <globmapper from="${basedir}/antbuild/classes/*" to="*" handledirsep="true"/>
+        <packagemapper from="*Test.class" to="*Test"/>
+      </chainedmapper>
+    </pathconvert>
+    <foreach target="-junit5console" param="test" list="${testclasses}"/>
+    <junitreport>
+      <fileset dir="antbuild/junit" includes="TEST-*.xml"/>
+      <report format="frames" todir="antbuild/html"/>
+    </junitreport>
+  </target>
+
+  <target name="-junit5console">
+    <junitlauncher haltOnFailure="off">
+      <classpath location="antbuild/classes"/>
+      <classpath refid="base.path"/>
+      <test outputdir="antbuild/junit" name="${test}">
+        <listener type="legacy-xml"/>
+        <listener type="legacy-plain" sendSysOut="true"/>
+      </test>
+    </junitlauncher>
   </target>
 
 </project>
