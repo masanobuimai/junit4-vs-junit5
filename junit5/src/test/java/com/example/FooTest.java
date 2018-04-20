@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FooTest {
     private static final String PID = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
-    private static final Logger log = Logger.getLogger("BarTest");
+    private static final Logger log = Logger.getLogger("FooTest");
 
     @Test
     public void testGreeting() {
